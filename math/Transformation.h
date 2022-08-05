@@ -25,7 +25,6 @@ namespace cerver {
             typedef std::shared_ptr<Matrix3f> Matrix3fPtr;
             typedef std::shared_ptr<Transformation> TransformationPtr;
         private:
-            Matrix4fPtr matrix4f;
             Matrix4fPtr matrix;
             bool decomposed;
             Vector3fPtr translation;
@@ -36,22 +35,44 @@ namespace cerver {
             TransformationPtr IDENTITY;
 
         public:
-            explicit Transformation(Matrix4fPtr matrix4f);
+            Transformation() = default;
 
-            Transformation(Vector3fPtr vector3f, QuaternionPtr quaternion, Vector3fPtr vector3f2, QuaternionPtr quaternion2);
+            explicit Transformation(const Matrix4fPtr& matrix4f);
+
+            Transformation(const Vector3fPtr& vector3f, const QuaternionPtr& quaternion, const Vector3fPtr& vector3f2, const QuaternionPtr& quaternion2);
 
             TransformationPtr identity();
 
-            TransformationPtr compose(TransformationPtr transformation);
+            TransformationPtr compose(const TransformationPtr& transformation);
 
             TransformationPtr inverse();
+
+            std::pair<Matrix3fPtr, Vector3fPtr> toAffine(const Matrix4fPtr& matrix4f);
+
+            Matrix4fPtr getMatrix();
+
+            Vector3fPtr getTranslation();
+
+            QuaternionPtr getLeftRotation();
+
+            Vector3fPtr getScale();
+
+            QuaternionPtr getRightRotation();
+
+            bool equals();
+
+            int hashCode();
+
+            TransformationPtr slerp(const TransformationPtr& transformation, double f);
+
+
 
         private:
             void ensureDecomposed();
 
-            Matrix4fPtr compose(Vector3fPtr vector3f, QuaternionPtr quaternion, Vector3fPtr vector3f2, QuaternionPtr quaternion2);
+            Matrix4fPtr compose(const Vector3fPtr& vector3f, const QuaternionPtr& quaternion, const Vector3fPtr& vector3f2, const QuaternionPtr& quaternion2);
 
-            std::pair<Matrix3fPtr, Vector3fPtr> toAffine(Matrix4fPtr matrix4f);
+
         };
     }
 }

@@ -5,6 +5,7 @@
 #include "Matrix3f.h"
 #include <utility>
 #include "Matrix4f.h"
+#include "Vector3f.h"
 #include "../minecraft/util/Mth.h"
 
 cerver::math::Matrix3f::Matrix3f(std::shared_ptr<Quaternion> quaternion) {
@@ -484,5 +485,76 @@ void cerver::math::Matrix3f::sortSingularValues(std::shared_ptr<Matrix3f> matrix
         quaternion2 = std::make_shared<Quaternion>(Quaternion(SQ2, 0.0f, 0.0f, SQ2));
         quaternion->mul(quaternion2);
     }
+}
+
+std::tuple<cerver::math::Matrix3f::QuaternionPtr, cerver::math::Matrix3f::Vector3fPtr, cerver::math::Matrix3f::QuaternionPtr>
+        cerver::math::Matrix3f::svdDecompose() {
+    std::shared_ptr<Quaternion> quaternion = Quaternion().ONE->copy();
+    std::shared_ptr<Quaternion> quaternion2 = Quaternion().ONE->copy();
+    std::shared_ptr<Matrix3f> matrix3f = this->copy();
+    matrix3f->transpose();
+    matrix3f->mul(std::make_shared<Matrix3f>(*this));
+    for (int i = 0; i < 5; ++i) {
+        quaternion2->mul(Matrix3f().stepJacobi(matrix3f));
+    }
+    quaternion2->normalize();
+    std::shared_ptr<Matrix3f> matrix3f2 = std::make_shared<Matrix3f>(*this);
+    matrix3f2->mul(std::make_shared<Matrix3f>(quaternion2));
+    double f = 1.0;
+    std::pair<double, double> pair = Matrix3f().qrGivensQuat(matrix3f2->m00, matrix3f2->m10);
+    double f2 = pair.first;
+    double f3 = pair.second;
+    double f4 = f3 * f3 - f2 * f2;
+    double f5 = -2.0 * f2 * f3;
+    double f6 = f3 * f3 + f2 * f2;
+    std::shared_ptr<Quaternion> quaternion3 = std::make_shared<Quaternion>(0.0f, 0.0f, f2, f3);
+    quaternion->mul(quaternion3);
+    std::shared_ptr<Matrix3f> matrix3f3 = std::make_shared<Matrix3f>();
+    matrix3f3->setIdentity();
+    matrix3f3->m00 = f4;
+    matrix3f3->m11 = f4;
+    matrix3f3->m10 = f5;
+    matrix3f3->m01 = -f5;
+    matrix3f3->m22 = f6;
+    f *= f6;
+    matrix3f3->mul(matrix3f2);
+    pair = Matrix3f().qrGivensQuat(matrix3f3->m00, matrix3f3->m20);
+    double f7 = -(pair.first);
+    double f8 = pair.second;
+    double f9 = f8 * f8 - f7 * f7;
+    double f10 = -2.0 * f7 * f8;
+    double f11 = f8 * f8 + f7 * f7;
+    std::shared_ptr<Quaternion> quaternion4 =  std::make_shared<Quaternion>(0.0f, f7, 0.0f, f8);
+    quaternion->mul(quaternion4);
+    std::shared_ptr<Matrix3f> matrix3f4 = std::make_shared<Matrix3f>();
+    matrix3f4->setIdentity();
+    matrix3f4->m00 = f9;
+    matrix3f4->m22 = f9;
+    matrix3f4->m20 = -f10;
+    matrix3f4->m02 = f10;
+    matrix3f4->m11 = f11;
+    f *= f11;
+    matrix3f4->mul(matrix3f3);
+    pair = Matrix3f().qrGivensQuat(matrix3f4->m11, matrix3f4->m21);
+    double f12 = pair.first;
+    double f13 = pair.second;
+    double f14 = f13 * f13 - f12 * f12;
+    double f15 = -2.0 * f12 * f13;
+    double f16 = f13 * f13 + f12 * f12;
+    std::shared_ptr<Quaternion> quaternion5 =  std::make_shared<Quaternion>(f12, 0.0f, 0.0f, f13);
+    quaternion->mul(quaternion5);
+    std::shared_ptr<Matrix3f> matrix3f5 = std::make_shared<Matrix3f>();
+    matrix3f5->setIdentity();
+    matrix3f5->m11 = f14;
+    matrix3f5->m22 = f14;
+    matrix3f5->m21 = f15;
+    matrix3f5->m12 = -f15;
+    matrix3f5->m00 = f16;
+    f *= f16;
+    matrix3f5->mul(matrix3f4);
+    f = 1.0 / f;
+    quaternion->mul(std::sqrt(f));
+    std::shared_ptr<Vector3f> vector3f = std::make_shared<Vector3f>(matrix3f5->m00 * f, matrix3f5->m11 * f, matrix3f5->m22 * f);
+    return {quaternion, vector3f, quaternion2};
 }
 

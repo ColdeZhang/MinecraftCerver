@@ -6,6 +6,7 @@
 #include "Quaternion.h"
 #include "Vector3f.h"
 #include <cmath>
+#include <utility>
 
 cerver::math::Matrix4f::Matrix4f(std::shared_ptr<Matrix4f> matrix4f) {
     this->m00 = matrix4f->m00;
@@ -72,7 +73,7 @@ std::shared_ptr<cerver::math::Matrix4f> cerver::math::Matrix4f::copy() {
 }
 
 void cerver::math::Matrix4f::multiply(std::shared_ptr<Quaternion> quaternion) {
-    this->multiply(std::make_shared<Matrix4f>(Matrix4f(quaternion)));
+    this->multiply(std::make_shared<Matrix4f>(Matrix4f(std::move(quaternion))));
 }
 
 void cerver::math::Matrix4f::multiply(std::shared_ptr<Matrix4f> matrix4f) {

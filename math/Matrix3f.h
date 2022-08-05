@@ -13,11 +13,13 @@ namespace cerver {
     namespace math {
         class Quaternion;
         class Matrix4f;
+        class Vector3f;
         class Matrix3f {
 
             typedef std::shared_ptr<Matrix4f> Matrix4fPtr;
             typedef std::shared_ptr<Quaternion> QuaternionPtr;
             typedef std::shared_ptr<Matrix3f> Matrix3fPtr;
+            typedef std::shared_ptr<Vector3f> Vector3fPtr;
 
         private:
             int ORDER = 3;
@@ -91,6 +93,8 @@ namespace cerver {
             Matrix3fPtr copy();
 
             void transpose();
+
+            std::tuple<QuaternionPtr, Vector3fPtr, QuaternionPtr> svdDecompose();
 
         private:
             std::pair<double, double> approxGivensQuat(double f, double f2, double f3);

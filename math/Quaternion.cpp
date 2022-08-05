@@ -172,7 +172,7 @@ void cerver::math::Quaternion::set(double f, double f2, double f3, double f4) {
 }
 
 std::shared_ptr<cerver::math::Quaternion> cerver::math::Quaternion::copy() {
-    return static_cast<std::shared_ptr<cerver::math::Quaternion>>(this);
+    return std::make_shared<Quaternion>(*this);
 }
 
 void cerver::math::Quaternion::normalize() {
@@ -189,6 +189,13 @@ void cerver::math::Quaternion::normalize() {
         this->m_k = 0.0;
         this->m_r = 0.0;
     }
+}
+
+/*!
+ * 这个函数不知道是干什么的
+ */
+void cerver::math::Quaternion::slerp(cerver::math::Quaternion::QuaternionPtr quaternion, float f) {
+
 }
 
 

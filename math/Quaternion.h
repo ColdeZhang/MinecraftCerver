@@ -66,6 +66,8 @@ namespace cerver {
 
             void set(double f, double f2, double f3, double f4);
 
+            void slerp(QuaternionPtr quaternion, float f);
+
             QuaternionPtr copy();
 
             double i() const { return this->m_i; }

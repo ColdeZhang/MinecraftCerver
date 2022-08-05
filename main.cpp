@@ -4,6 +4,6 @@
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
-    Vector3f vector3F(1.0, 2.0, 3.0);
+    cerver::math::Vector3f vector3F(1.0, 2.0, 3.0);
     return 0;
 }
