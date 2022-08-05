@@ -22,20 +22,26 @@ namespace cerver {
         class Matrix3f;
         class Quaternion;
         class Vector3f {
+
+            typedef std::shared_ptr<Vector3f> Vector3fPtr;
+            typedef std::shared_ptr<Vector4f> Vector4fPtr;
+            typedef std::shared_ptr<Quaternion> QuaternionPtr;
+            typedef std::shared_ptr<Matrix3f> Matrix3fPtr;
+
         public:
-            std::shared_ptr<Vector3f> XN = std::make_shared<Vector3f>(-1.0, 0.0, 0.0);
-            std::shared_ptr<Vector3f> XP = std::make_shared<Vector3f>(1.0, 0.0, 0.0);
-            std::shared_ptr<Vector3f> YN = std::make_shared<Vector3f>(0.0, -1.0, 0.0);
-            std::shared_ptr<Vector3f> YP = std::make_shared<Vector3f>(0.0, 1.0, 0.0);
-            std::shared_ptr<Vector3f> ZN = std::make_shared<Vector3f>(0.0, 0.0, -1.0);
-            std::shared_ptr<Vector3f> ZP = std::make_shared<Vector3f>(0.0, 0.0, 1.0);
-            std::shared_ptr<Vector3f> ZERO = std::make_shared<Vector3f>(0.0, 0.0, 0.0);
+            Vector3fPtr XN = std::make_shared<Vector3f>(-1.0, 0.0, 0.0);
+            Vector3fPtr XP = std::make_shared<Vector3f>(1.0, 0.0, 0.0);
+            Vector3fPtr YN = std::make_shared<Vector3f>(0.0, -1.0, 0.0);
+            Vector3fPtr YP = std::make_shared<Vector3f>(0.0, 1.0, 0.0);
+            Vector3fPtr ZN = std::make_shared<Vector3f>(0.0, 0.0, -1.0);
+            Vector3fPtr ZP = std::make_shared<Vector3f>(0.0, 0.0, 1.0);
+            Vector3fPtr ZERO = std::make_shared<Vector3f>(0.0, 0.0, 0.0);
 
             Vector3f() = default;
 
             Vector3f(double f, double f2, double f3);
 
-            explicit Vector3f(Vector4f vector4f);
+            explicit Vector3f(Vector4fPtr vector4f);
 
             int hashCode();
 
@@ -49,36 +55,36 @@ namespace cerver {
 
             void set(double f, double f2, double f3);
 
-            void load(const Vector3f& vector3f);
+            void load(Vector3fPtr vector3f);
 
             void add(double f, double f2, double f3);
 
-            void add(const Vector3f& vector3f);
+            void add(Vector3fPtr vector3f);
 
-            void sub(Vector3f vector3f);
+            void sub(Vector3fPtr vector3f);
 
-            double dot(Vector3f vector3f);
+            double dot(Vector3fPtr vector3f);
 
-            void cross(Vector3f vector3f);
+            void cross(Vector3fPtr vector3f);
 
-            void transform(Matrix3f matrix3f);
+            void transform(Matrix3fPtr matrix3f);
 
-            void transform(const Quaternion &quaternion);
+            void transform(QuaternionPtr quaternion);
 
-            void lerp(const Vector3f& vector3f, double f);
+            void lerp(Vector3fPtr vector3f, double f);
 
-            Quaternion rotation(double f);
+            QuaternionPtr rotation(double f);
 
-            Quaternion rotationDegrees(double f);
+            QuaternionPtr rotationDegrees(double f);
 
-            std::shared_ptr<Vector3f> copy();
+            Vector3fPtr copy();
 
             std::string toString() const;
 
         private:
-            double m_x;
-            double m_y;
-            double m_z;
+            double m_x{};
+            double m_y{};
+            double m_z{};
         };
     }
 }

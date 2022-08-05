@@ -7,30 +7,30 @@
 #include "Vector3f.h"
 #include <cmath>
 
-cerver::math::Matrix4f::Matrix4f(cerver::math::Matrix4f const &matrix4f) {
-    this->m00 = matrix4f.m00;
-    this->m01 = matrix4f.m01;
-    this->m02 = matrix4f.m02;
-    this->m03 = matrix4f.m03;
-    this->m10 = matrix4f.m10;
-    this->m11 = matrix4f.m11;
-    this->m12 = matrix4f.m12;
-    this->m13 = matrix4f.m13;
-    this->m20 = matrix4f.m20;
-    this->m21 = matrix4f.m21;
-    this->m22 = matrix4f.m22;
-    this->m23 = matrix4f.m23;
-    this->m30 = matrix4f.m30;
-    this->m31 = matrix4f.m31;
-    this->m32 = matrix4f.m32;
-    this->m33 = matrix4f.m33;
+cerver::math::Matrix4f::Matrix4f(std::shared_ptr<Matrix4f> matrix4f) {
+    this->m00 = matrix4f->m00;
+    this->m01 = matrix4f->m01;
+    this->m02 = matrix4f->m02;
+    this->m03 = matrix4f->m03;
+    this->m10 = matrix4f->m10;
+    this->m11 = matrix4f->m11;
+    this->m12 = matrix4f->m12;
+    this->m13 = matrix4f->m13;
+    this->m20 = matrix4f->m20;
+    this->m21 = matrix4f->m21;
+    this->m22 = matrix4f->m22;
+    this->m23 = matrix4f->m23;
+    this->m30 = matrix4f->m30;
+    this->m31 = matrix4f->m31;
+    this->m32 = matrix4f->m32;
+    this->m33 = matrix4f->m33;
 }
 
-cerver::math::Matrix4f::Matrix4f(cerver::math::Quaternion quaternion) {
-    double f = quaternion.i();
-    double f2 = quaternion.j();
-    double f3 = quaternion.k();
-    double f4 = quaternion.r();
+cerver::math::Matrix4f::Matrix4f(std::shared_ptr<Quaternion> quaternion) {
+    double f = quaternion->i();
+    double f2 = quaternion->j();
+    double f3 = quaternion->k();
+    double f4 = quaternion->r();
     double f5 = 2.0 * f * f;
     double f6 = 2.0 * f2 * f2;
     double f7 = 2.0 * f3 * f3;
@@ -53,11 +53,11 @@ cerver::math::Matrix4f::Matrix4f(cerver::math::Quaternion quaternion) {
 }
 
 bool cerver::math::Matrix4f::isInteger() {
-    Matrix4f matrix4f = Matrix4f();
-    matrix4f.m30 = 1.0;
-    matrix4f.m31 = 1.0;
-    matrix4f.m32 = 1.0;
-    matrix4f.m33 = 0.0;
+    std::shared_ptr<Matrix4f>matrix4f = std::make_shared<Matrix4f>(Matrix4f());
+    matrix4f->m30 = 1.0;
+    matrix4f->m31 = 1.0;
+    matrix4f->m32 = 1.0;
+    matrix4f->m33 = 0.0;
     Matrix4f matrix4f2 = this->copy();
     matrix4f2.multiply(matrix4f);
     return isInteger(matrix4f2.m00 / matrix4f2.m03) && isInteger(matrix4f2.m10 / matrix4f2.m13) && isInteger(matrix4f2.m20 / matrix4f2.m23) && isInteger(matrix4f2.m01 / matrix4f2.m03) && isInteger(matrix4f2.m11 / matrix4f2.m13) && isInteger(matrix4f2.m21 / matrix4f2.m23) && isInteger(matrix4f2.m02 / matrix4f2.m03) && isInteger(matrix4f2.m12 / matrix4f2.m13) && isInteger(matrix4f2.m22 / matrix4f2.m23);
@@ -67,31 +67,31 @@ bool cerver::math::Matrix4f::isInteger(double f){
     return std::abs(f - std::round(f)) <= 0.000001;
 }
 
-cerver::math::Matrix4f cerver::math::Matrix4f::copy() {
-    return Matrix4f(*this);
+std::shared_ptr<cerver::math::Matrix4f> cerver::math::Matrix4f::copy() {
+    return std::make_shared<Matrix4f>(*this);
 }
 
-void cerver::math::Matrix4f::multiply(cerver::math::Quaternion quaternion) {
-    this->multiply(Matrix4f(quaternion));
+void cerver::math::Matrix4f::multiply(std::shared_ptr<Quaternion> quaternion) {
+    this->multiply(std::make_shared<Matrix4f>(Matrix4f(quaternion)));
 }
 
-void cerver::math::Matrix4f::multiply(cerver::math::Matrix4f matrix4f) {
-    double f = this->m00 * matrix4f.m00 + this->m01 * matrix4f.m10 + this->m02 * matrix4f.m20 + this->m03 * matrix4f.m30;
-    double f2 = this->m00 * matrix4f.m01 + this->m01 * matrix4f.m11 + this->m02 * matrix4f.m21 + this->m03 * matrix4f.m31;
-    double f3 = this->m00 * matrix4f.m02 + this->m01 * matrix4f.m12 + this->m02 * matrix4f.m22 + this->m03 * matrix4f.m32;
-    double f4 = this->m00 * matrix4f.m03 + this->m01 * matrix4f.m13 + this->m02 * matrix4f.m23 + this->m03 * matrix4f.m33;
-    double f5 = this->m10 * matrix4f.m00 + this->m11 * matrix4f.m10 + this->m12 * matrix4f.m20 + this->m13 * matrix4f.m30;
-    double f6 = this->m10 * matrix4f.m01 + this->m11 * matrix4f.m11 + this->m12 * matrix4f.m21 + this->m13 * matrix4f.m31;
-    double f7 = this->m10 * matrix4f.m02 + this->m11 * matrix4f.m12 + this->m12 * matrix4f.m22 + this->m13 * matrix4f.m32;
-    double f8 = this->m10 * matrix4f.m03 + this->m11 * matrix4f.m13 + this->m12 * matrix4f.m23 + this->m13 * matrix4f.m33;
-    double f9 = this->m20 * matrix4f.m00 + this->m21 * matrix4f.m10 + this->m22 * matrix4f.m20 + this->m23 * matrix4f.m30;
-    double f10 = this->m20 * matrix4f.m01 + this->m21 * matrix4f.m11 + this->m22 * matrix4f.m21 + this->m23 * matrix4f.m31;
-    double f11 = this->m20 * matrix4f.m02 + this->m21 * matrix4f.m12 + this->m22 * matrix4f.m22 + this->m23 * matrix4f.m32;
-    double f12 = this->m20 * matrix4f.m03 + this->m21 * matrix4f.m13 + this->m22 * matrix4f.m23 + this->m23 * matrix4f.m33;
-    double f13 = this->m30 * matrix4f.m00 + this->m31 * matrix4f.m10 + this->m32 * matrix4f.m20 + this->m33 * matrix4f.m30;
-    double f14 = this->m30 * matrix4f.m01 + this->m31 * matrix4f.m11 + this->m32 * matrix4f.m21 + this->m33 * matrix4f.m31;
-    double f15 = this->m30 * matrix4f.m02 + this->m31 * matrix4f.m12 + this->m32 * matrix4f.m22 + this->m33 * matrix4f.m32;
-    double f16 = this->m30 * matrix4f.m03 + this->m31 * matrix4f.m13 + this->m32 * matrix4f.m23 + this->m33 * matrix4f.m33;
+void cerver::math::Matrix4f::multiply(std::shared_ptr<Matrix4f> matrix4f) {
+    double f = this->m00 * matrix4f->m00 + this->m01 * matrix4f->m10 + this->m02 * matrix4f->m20 + this->m03 * matrix4f->m30;
+    double f2 = this->m00 * matrix4f->m01 + this->m01 * matrix4f->m11 + this->m02 * matrix4f->m21 + this->m03 * matrix4f->m31;
+    double f3 = this->m00 * matrix4f->m02 + this->m01 * matrix4f->m12 + this->m02 * matrix4f->m22 + this->m03 * matrix4f->m32;
+    double f4 = this->m00 * matrix4f->m03 + this->m01 * matrix4f->m13 + this->m02 * matrix4f->m23 + this->m03 * matrix4f->m33;
+    double f5 = this->m10 * matrix4f->m00 + this->m11 * matrix4f->m10 + this->m12 * matrix4f->m20 + this->m13 * matrix4f->m30;
+    double f6 = this->m10 * matrix4f->m01 + this->m11 * matrix4f->m11 + this->m12 * matrix4f->m21 + this->m13 * matrix4f->m31;
+    double f7 = this->m10 * matrix4f->m02 + this->m11 * matrix4f->m12 + this->m12 * matrix4f->m22 + this->m13 * matrix4f->m32;
+    double f8 = this->m10 * matrix4f->m03 + this->m11 * matrix4f->m13 + this->m12 * matrix4f->m23 + this->m13 * matrix4f->m33;
+    double f9 = this->m20 * matrix4f->m00 + this->m21 * matrix4f->m10 + this->m22 * matrix4f->m20 + this->m23 * matrix4f->m30;
+    double f10 = this->m20 * matrix4f->m01 + this->m21 * matrix4f->m11 + this->m22 * matrix4f->m21 + this->m23 * matrix4f->m31;
+    double f11 = this->m20 * matrix4f->m02 + this->m21 * matrix4f->m12 + this->m22 * matrix4f->m22 + this->m23 * matrix4f->m32;
+    double f12 = this->m20 * matrix4f->m03 + this->m21 * matrix4f->m13 + this->m22 * matrix4f->m23 + this->m23 * matrix4f->m33;
+    double f13 = this->m30 * matrix4f->m00 + this->m31 * matrix4f->m10 + this->m32 * matrix4f->m20 + this->m33 * matrix4f->m30;
+    double f14 = this->m30 * matrix4f->m01 + this->m31 * matrix4f->m11 + this->m32 * matrix4f->m21 + this->m33 * matrix4f->m31;
+    double f15 = this->m30 * matrix4f->m02 + this->m31 * matrix4f->m12 + this->m32 * matrix4f->m22 + this->m33 * matrix4f->m32;
+    double f16 = this->m30 * matrix4f->m03 + this->m31 * matrix4f->m13 + this->m32 * matrix4f->m23 + this->m33 * matrix4f->m33;
     this->m00 = f;
     this->m01 = f2;
     this->m02 = f3;
@@ -129,49 +129,49 @@ void cerver::math::Matrix4f::multiply(double d) {
     this->m33 *= d;
 }
 
-void cerver::math::Matrix4f::add(const cerver::math::Matrix4f& matrix4f) {
-    this->m00 += matrix4f.m00;
-    this->m01 += matrix4f.m01;
-    this->m02 += matrix4f.m02;
-    this->m03 += matrix4f.m03;
-    this->m10 += matrix4f.m10;
-    this->m11 += matrix4f.m11;
-    this->m12 += matrix4f.m12;
-    this->m13 += matrix4f.m13;
-    this->m20 += matrix4f.m20;
-    this->m21 += matrix4f.m21;
-    this->m22 += matrix4f.m22;
-    this->m23 += matrix4f.m23;
-    this->m30 += matrix4f.m30;
-    this->m31 += matrix4f.m31;
-    this->m32 += matrix4f.m32;
-    this->m33 += matrix4f.m33;
+void cerver::math::Matrix4f::add(std::shared_ptr<Matrix4f> matrix4f) {
+    this->m00 += matrix4f->m00;
+    this->m01 += matrix4f->m01;
+    this->m02 += matrix4f->m02;
+    this->m03 += matrix4f->m03;
+    this->m10 += matrix4f->m10;
+    this->m11 += matrix4f->m11;
+    this->m12 += matrix4f->m12;
+    this->m13 += matrix4f->m13;
+    this->m20 += matrix4f->m20;
+    this->m21 += matrix4f->m21;
+    this->m22 += matrix4f->m22;
+    this->m23 += matrix4f->m23;
+    this->m30 += matrix4f->m30;
+    this->m31 += matrix4f->m31;
+    this->m32 += matrix4f->m32;
+    this->m33 += matrix4f->m33;
 }
 
-void cerver::math::Matrix4f::subtract(const cerver::math::Matrix4f& matrix4f) {
-    this->m00 -= matrix4f.m00;
-    this->m01 -= matrix4f.m01;
-    this->m02 -= matrix4f.m02;
-    this->m03 -= matrix4f.m03;
-    this->m10 -= matrix4f.m10;
-    this->m11 -= matrix4f.m11;
-    this->m12 -= matrix4f.m12;
-    this->m13 -= matrix4f.m13;
-    this->m20 -= matrix4f.m20;
-    this->m21 -= matrix4f.m21;
-    this->m22 -= matrix4f.m22;
-    this->m23 -= matrix4f.m23;
-    this->m30 -= matrix4f.m30;
-    this->m31 -= matrix4f.m31;
-    this->m32 -= matrix4f.m32;
-    this->m33 -= matrix4f.m33;
+void cerver::math::Matrix4f::subtract(std::shared_ptr<Matrix4f> matrix4f) {
+    this->m00 -= matrix4f->m00;
+    this->m01 -= matrix4f->m01;
+    this->m02 -= matrix4f->m02;
+    this->m03 -= matrix4f->m03;
+    this->m10 -= matrix4f->m10;
+    this->m11 -= matrix4f->m11;
+    this->m12 -= matrix4f->m12;
+    this->m13 -= matrix4f->m13;
+    this->m20 -= matrix4f->m20;
+    this->m21 -= matrix4f->m21;
+    this->m22 -= matrix4f->m22;
+    this->m23 -= matrix4f->m23;
+    this->m30 -= matrix4f->m30;
+    this->m31 -= matrix4f->m31;
+    this->m32 -= matrix4f->m32;
+    this->m33 -= matrix4f->m33;
 }
 
 double cerver::math::Matrix4f::trace() const {
     return this->m00 + this->m11 + this->m22 + this->m33;
 }
 
-cerver::math::Matrix4f cerver::math::Matrix4f::perspective(double fov, double f, double f2, double f3) {
+std::shared_ptr<cerver::math::Matrix4f> cerver::math::Matrix4f::perspective(double fov, double f, double f2, double f3) {
     double f4 = 1.0 / std::tan(fov * 0.01745329238474369 / 2.0);
     Matrix4f matrix4f = Matrix4f();
     matrix4f.m00 = f4 / f;
@@ -179,10 +179,10 @@ cerver::math::Matrix4f cerver::math::Matrix4f::perspective(double fov, double f,
     matrix4f.m22 = (f2 + f3) / (f2 - f3);
     matrix4f.m32 = -1.0;
     matrix4f.m23 = 2.0 * f2 * f3 / (f2 - f3);
-    return matrix4f;
+    return std::make_shared<Matrix4f>(matrix4f);
 }
 
-cerver::math::Matrix4f cerver::math::Matrix4f::orthographic(double f, double f2, double f3, double f4) {
+std::shared_ptr<cerver::math::Matrix4f> cerver::math::Matrix4f::orthographic(double f, double f2, double f3, double f4) {
     Matrix4f matrix4f = Matrix4f();
     matrix4f.m00 = 2.0 / f;
     matrix4f.m11 = 2.0 / f2;
@@ -192,10 +192,10 @@ cerver::math::Matrix4f cerver::math::Matrix4f::orthographic(double f, double f2,
     matrix4f.m03 = -1.0;
     matrix4f.m13 = 1.0;
     matrix4f.m23 = -(f4 + f3) / f5;
-    return matrix4f;
+    return std::make_shared<Matrix4f>(matrix4f);
 }
 
-cerver::math::Matrix4f
+std::shared_ptr<cerver::math::Matrix4f>
 cerver::math::Matrix4f::orthographic(double f, double f2, double f3, double f4, double f5, double f6) {
     Matrix4f matrix4f = Matrix4f();
     double f7 = f2 - f;
@@ -208,13 +208,13 @@ cerver::math::Matrix4f::orthographic(double f, double f2, double f3, double f4, 
     matrix4f.m13 = -(f3 + f4) / f8;
     matrix4f.m23 = -(f6 + f5) / f9;
     matrix4f.m33 = 1.0;
-    return matrix4f;
+    return std::make_shared<Matrix4f>(matrix4f);
 }
 
-void cerver::math::Matrix4f::translate(cerver::math::Vector3f vector3f) {
-    this->m03 += vector3f.x();
-    this->m13 += vector3f.y();
-    this->m23 += vector3f.z();
+void cerver::math::Matrix4f::translate(std::shared_ptr<Vector3f> vector3f) {
+    this->m03 += vector3f->x();
+    this->m13 += vector3f->y();
+    this->m23 += vector3f->z();
 }
 
 void cerver::math::Matrix4f::multiplyWithTranslation(double f, double f2, double f3) {
@@ -224,16 +224,16 @@ void cerver::math::Matrix4f::multiplyWithTranslation(double f, double f2, double
     this->m33 = this->m30 * f + this->m31 * f2 + this->m32 * f3 + this->m33;
 }
 
-cerver::math::Matrix4f cerver::math::Matrix4f::createScaleMatrix(double f, double f2, double f3) {
+std::shared_ptr<cerver::math::Matrix4f> cerver::math::Matrix4f::createScaleMatrix(double f, double f2, double f3) {
     Matrix4f matrix4f = Matrix4f();
     matrix4f.m00 = f;
     matrix4f.m11 = f2;
     matrix4f.m22 = f3;
     matrix4f.m33 = 1.0;
-    return matrix4f;
+    return std::make_shared<Matrix4f>(matrix4f);
 }
 
-cerver::math::Matrix4f cerver::math::Matrix4f::createTranslateMatrix(double f, double f2, double f3) {
+std::shared_ptr<cerver::math::Matrix4f> cerver::math::Matrix4f::createTranslateMatrix(double f, double f2, double f3) {
     Matrix4f matrix4f = Matrix4f();
     matrix4f.m00 = 1.0;
     matrix4f.m11 = 1.0;
@@ -242,7 +242,7 @@ cerver::math::Matrix4f cerver::math::Matrix4f::createTranslateMatrix(double f, d
     matrix4f.m03 = f;
     matrix4f.m13 = f2;
     matrix4f.m23 = f3;
-    return matrix4f;
+    return std::make_shared<Matrix4f>(matrix4f);
 }
 
 int cerver::math::Matrix4f::hashCode() const {
@@ -315,23 +315,23 @@ void cerver::math::Matrix4f::load(std::map<int, double> buffer, bool bl) {
     }
 }
 
-void cerver::math::Matrix4f::load(cerver::math::Matrix4f matrix4f) {
-    this->m00 = matrix4f.m00;
-    this->m01 = matrix4f.m01;
-    this->m02 = matrix4f.m02;
-    this->m03 = matrix4f.m03;
-    this->m10 = matrix4f.m10;
-    this->m11 = matrix4f.m11;
-    this->m12 = matrix4f.m12;
-    this->m13 = matrix4f.m13;
-    this->m20 = matrix4f.m20;
-    this->m21 = matrix4f.m21;
-    this->m22 = matrix4f.m22;
-    this->m23 = matrix4f.m23;
-    this->m30 = matrix4f.m30;
-    this->m31 = matrix4f.m31;
-    this->m32 = matrix4f.m32;
-    this->m33 = matrix4f.m33;
+void cerver::math::Matrix4f::load(std::shared_ptr<Matrix4f> matrix4f) {
+    this->m00 = matrix4f->m00;
+    this->m01 = matrix4f->m01;
+    this->m02 = matrix4f->m02;
+    this->m03 = matrix4f->m03;
+    this->m10 = matrix4f->m10;
+    this->m11 = matrix4f->m11;
+    this->m12 = matrix4f->m12;
+    this->m13 = matrix4f->m13;
+    this->m20 = matrix4f->m20;
+    this->m21 = matrix4f->m21;
+    this->m22 = matrix4f->m22;
+    this->m23 = matrix4f->m23;
+    this->m30 = matrix4f->m30;
+    this->m31 = matrix4f->m31;
+    this->m32 = matrix4f->m32;
+    this->m33 = matrix4f->m33;
 }
 
 std::string cerver::math::Matrix4f::toString() {

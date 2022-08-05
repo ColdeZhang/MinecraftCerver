@@ -17,32 +17,36 @@ namespace cerver {
     namespace math {
         class Vector3f;
         class Quaternion {
+
+            typedef std::shared_ptr<Vector3f> Vector3fPtr;
+            typedef std::shared_ptr<Quaternion> QuaternionPtr;
+
         public:
             Quaternion() = default;
 
             Quaternion(double d, double d2, double d3, double d4);
 
-            Quaternion(std::shared_ptr<Vector3f> vector3f, double f, bool bl);
+            Quaternion(Vector3fPtr vector3f, double f, bool bl);
 
             Quaternion(double f, double f2, double f3, bool bl);
 
-            Quaternion(const std::shared_ptr<Quaternion> &quaternion);
+            Quaternion(const QuaternionPtr &quaternion);
 
-            std::shared_ptr<Quaternion> fromYXZ(double f, double f2, double f3);
+            QuaternionPtr fromYXZ(double f, double f2, double f3);
 
-            std::shared_ptr<Quaternion> fromXYZDegrees(Vector3f vector3f);
+            QuaternionPtr fromXYZDegrees(Vector3fPtr vector3f);
 
-            std::shared_ptr<Quaternion> fromXYZ(Vector3f vector3f);
+            QuaternionPtr fromXYZ(Vector3fPtr vector3f);
 
-            std::shared_ptr<Quaternion> fromXYZ(double f, double f2, double f3);
+            QuaternionPtr fromXYZ(double f, double f2, double f3);
 
-            Vector3f toXYZ();
+            Vector3fPtr toXYZ();
 
-            Vector3f toXYZDegrees();
+            Vector3fPtr toXYZDegrees();
 
-            Vector3f toYXZ();
+            Vector3fPtr toYXZ();
 
-            Vector3f toYXZDegrees();
+            Vector3fPtr toYXZDegrees();
 
             bool equals() {
 
@@ -52,7 +56,7 @@ namespace cerver {
 
             std::string toString();
 
-            void mul(Quaternion quaternion);
+            void mul(QuaternionPtr quaternion);
 
             void mul(double f);
 
@@ -62,7 +66,7 @@ namespace cerver {
 
             void set(double f, double f2, double f3, double f4);
 
-            std::shared_ptr<Quaternion> copy();
+            QuaternionPtr copy();
 
             double i() const { return this->m_i; }
 
@@ -72,6 +76,7 @@ namespace cerver {
 
             double r() const { return this->m_r; }
 
+            QuaternionPtr ONE = std::make_shared<Quaternion>(0.0, 0.0, 0.0, 1.0);
 
         private:
             double m_i;
@@ -85,9 +90,6 @@ namespace cerver {
             double sin(double d) {return std::sin(d);}
 
         };
-
-        std::shared_ptr<Quaternion> ONE = std::make_shared<Quaternion>(0.0, 0.0, 0.0, 1.0);
-
     }
 }
 #endif //MINECRAFTCERVER_QUATERNION_H

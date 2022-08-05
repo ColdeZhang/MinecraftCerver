@@ -8,19 +8,26 @@
 #include <string>
 
 /*
- * transform(Matrix4f matrix4f) 未实现
+ *
  */
 namespace cerver {
     namespace math {
         class Vector3f;
         class Quaternion;
+        class Matrix4f;
         class Vector4f {
+
+            typedef std::shared_ptr<Vector3f> Vector3fPtr;
+            typedef std::shared_ptr<Quaternion> QuaternionPtr;
+            typedef std::shared_ptr<Matrix4f> Matrix4fPtr;
+            typedef std::shared_ptr<Vector4f> Vector4fPtr;
+
         public:
             Vector4f() = default;
 
             Vector4f(double f, double f2, double f3, double f4);
 
-            Vector4f(const Vector3f& vector3f);
+            Vector4f(Vector3fPtr vector3f);
 
             int hashCode() const;
 
@@ -34,31 +41,25 @@ namespace cerver {
 
             void mul(double f);
 
-            void mul(const Vector3f& vector3f);
+            void mul(Vector3fPtr vector3f);
 
             void set(double f, double f2, double f3, double f4);
 
             void add(double f, double f2, double f3, double f4);
 
-            double dot(Vector4f vector4f) const;
-
-            void transform(Quaternion quaternion);
+            double dot(Vector4fPtr vector4f) const;
 
             void perspectiveDivide();
 
-            void lerp(Vector4f vector4f, double f) {
-                double f2 = 1.0 - f;
-                this->m_x = f2 * this->m_x + f * vector4f.x();
-                this->m_y = f2 * this->m_y + f * vector4f.y();
-                this->m_z = f2 * this->m_z + f * vector4f.z();
-                this->m_w = f2 * this->m_w + f * vector4f.w();
-            }
+            void lerp(Vector4fPtr vector4f, double f);
 
-            std::string toString() {
-                return std::string("[") + std::to_string(this->m_x) + ", " + std::to_string(this->m_y) + ", " +
-                       std::to_string(this->m_z) + ", " + std::to_string(this->m_w) + "]";
-            }
+            std::string toString() const;
 
+            bool normalize();
+
+            void transform(Matrix4fPtr matrix4f);
+
+            void transform(QuaternionPtr quaternion);
 
         private:
             double m_x;

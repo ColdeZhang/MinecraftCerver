@@ -51,31 +51,31 @@ cerver::math::Quaternion::Quaternion(const std::shared_ptr<Quaternion> &quaterni
 
 std::shared_ptr<cerver::math::Quaternion> cerver::math::Quaternion::fromYXZ(double f, double f2, double f3) {
     std::shared_ptr<Quaternion> quaternion = ONE->copy();
-    quaternion->mul(Quaternion(0.0f, std::sin(f / 2.0), 0.0, std::cos(f / 2.0)));
-    quaternion->mul(Quaternion(std::sin(f2 / 2.0), 0.0, 0.0, std::cos(f2 / 2.0)));
-    quaternion->mul(Quaternion(0.0f, 0.0f, std::sin(f3 / 2.0), std::cos(f3 / 2.0)));
+    quaternion->mul(std::make_shared<Quaternion>(0.0f, std::sin(f / 2.0), 0.0, std::cos(f / 2.0)));
+    quaternion->mul(std::make_shared<Quaternion>(std::sin(f2 / 2.0), 0.0, 0.0, std::cos(f2 / 2.0)));
+    quaternion->mul(std::make_shared<Quaternion>(0.0f, 0.0f, std::sin(f3 / 2.0), std::cos(f3 / 2.0)));
     return quaternion;
 }
 
-std::shared_ptr<cerver::math::Quaternion> cerver::math::Quaternion::fromXYZDegrees(Vector3f vector3f) {
-    return fromXYZ(vector3f.x() * PI / 180.0,
-                   vector3f.y() * PI / 180.0,
-                   vector3f.x() * PI / 180.0);
+std::shared_ptr<cerver::math::Quaternion> cerver::math::Quaternion::fromXYZDegrees(std::shared_ptr<Vector3f> vector3f) {
+    return fromXYZ(vector3f->x() * PI / 180.0,
+                   vector3f->y() * PI / 180.0,
+                   vector3f->x() * PI / 180.0);
 }
 
-std::shared_ptr<cerver::math::Quaternion> cerver::math::Quaternion::fromXYZ(Vector3f vector3f) {
-    return fromXYZ(vector3f.x(), vector3f.y(), vector3f.z());
+std::shared_ptr<cerver::math::Quaternion> cerver::math::Quaternion::fromXYZ(std::shared_ptr<Vector3f> vector3f) {
+    return fromXYZ(vector3f->x(), vector3f->y(), vector3f->z());
 }
 
 std::shared_ptr<cerver::math::Quaternion> cerver::math::Quaternion::fromXYZ(double f, double f2, double f3) {
     std::shared_ptr<Quaternion> quaternion = ONE->copy();
-    quaternion->mul(Quaternion(std::sin(f / 2.0), 0.0, 0.0, std::cos(f / 2.0)));
-    quaternion->mul(Quaternion(0.0, std::sin(f2 / 2.0), 0.0, std::cos(f2 / 2.0)));
-    quaternion->mul(Quaternion(0.0, 0.0, std::sin(f3 / 2.0), std::cos(f3 / 2.0)));
+    quaternion->mul(std::make_shared<Quaternion>(std::sin(f / 2.0), 0.0, 0.0, std::cos(f / 2.0)));
+    quaternion->mul(std::make_shared<Quaternion>(0.0, std::sin(f2 / 2.0), 0.0, std::cos(f2 / 2.0)));
+    quaternion->mul(std::make_shared<Quaternion>(0.0, 0.0, std::sin(f3 / 2.0), std::cos(f3 / 2.0)));
     return quaternion;
 }
 
-cerver::math::Vector3f cerver::math::Quaternion::toXYZ() {
+std::shared_ptr<cerver::math::Vector3f> cerver::math::Quaternion::toXYZ() {
     double f = this->r() * this->r();
     double f2 = this->i() * this->i();
     double f3 = this->j() * this->j();
@@ -84,20 +84,20 @@ cerver::math::Vector3f cerver::math::Quaternion::toXYZ() {
     double f6 = 2.0 * this->r() * this->i() - 2.0 * this->j() * this->k();
     double f7 = std::asin(f6 / f5);
     if (std::abs(f6) > 0.999 * f5) {
-        return Vector3f(2.0f * std::atan2(this->i(), this->r()), f7, 0.0);
+        return std::make_shared<Vector3f>(Vector3f(2.0f * std::atan2(this->i(), this->r()), f7, 0.0));
     }
-    return Vector3f(std::atan2(2.0 * this->j() * this->k() + 2.0 * this->i() * this->r(),
+    return std::make_shared<Vector3f>(Vector3f(std::atan2(2.0 * this->j() * this->k() + 2.0 * this->i() * this->r(),
                                f - f2 - f3 + f4),
                     f7,
-                    std::atan2(2.0f * this->i() * this->j() + 2.0f * this->r() * this->k(), f + f2 - f3 - f4));
+                    std::atan2(2.0f * this->i() * this->j() + 2.0f * this->r() * this->k(), f + f2 - f3 - f4)));
 }
 
-cerver::math::Vector3f cerver::math::Quaternion::toXYZDegrees() {
-    Vector3f vector3f = this->toXYZ();
-    return Vector3f(vector3f.x() * PI / 180.0, vector3f.y() * PI / 180.0, vector3f.z() * PI / 180.0);
+std::shared_ptr<cerver::math::Vector3f> cerver::math::Quaternion::toXYZDegrees() {
+    std::shared_ptr<Vector3f> vector3f = this->toXYZ();
+    return std::make_shared<Vector3f>(Vector3f(vector3f->x() * PI / 180.0, vector3f->y() * PI / 180.0, vector3f->z() * PI / 180.0));
 }
 
-cerver::math::Vector3f cerver::math::Quaternion::toYXZ() {
+std::shared_ptr<cerver::math::Vector3f> cerver::math::Quaternion::toYXZ() {
     double f = this->r() * this->r();
     double f2 = this->i() * this->i();
     double f3 = this->j() * this->j();
@@ -106,17 +106,17 @@ cerver::math::Vector3f cerver::math::Quaternion::toYXZ() {
     double f6 = 2.0 * this->r() * this->i() - 2.0 * this->j() * this->k();
     double f7 = std::asin(f6 / f5);
     if (std::abs(f6) > 0.999 * f5) {
-        return Vector3f(f7, 2.0f * std::atan2(this->i(), this->r()), 0.0);
+        return std::make_shared<Vector3f>(Vector3f(f7, 2.0f * std::atan2(this->i(), this->r()), 0.0));
     }
-    return Vector3f(f7,
+    return std::make_shared<Vector3f>(Vector3f(f7,
                     std::atan2(2.0 * this->i() * this->k() + 2.0 * this->j() * this->r(),
                                f - f2 - f3 + f4),
-                    std::atan2(2.0f * this->i() * this->j() + 2.0f * this->r() * this->k(), f - f2 + f3 - f4));
+                    std::atan2(2.0f * this->i() * this->j() + 2.0f * this->r() * this->k(), f - f2 + f3 - f4)));
 }
 
-cerver::math::Vector3f cerver::math::Quaternion::toYXZDegrees() {
-    Vector3f vector3f = this->toYXZ();
-    return Vector3f(vector3f.x() * PI / 180.0, vector3f.y() * PI / 180.0, vector3f.z() * PI / 180.0);
+std::shared_ptr<cerver::math::Vector3f> cerver::math::Quaternion::toYXZDegrees() {
+    std::shared_ptr<Vector3f> vector3f = this->toYXZ();
+    return std::make_shared<Vector3f>(Vector3f(vector3f->x() * PI / 180.0, vector3f->y() * PI / 180.0, vector3f->z() * PI / 180.0));
 }
 
 int cerver::math::Quaternion::hashCode() {
@@ -136,15 +136,15 @@ std::string cerver::math::Quaternion::toString() {
     return strBuild;
 }
 
-void cerver::math::Quaternion::mul(Quaternion quaternion) {
+void cerver::math::Quaternion::mul(std::shared_ptr<Quaternion> quaternion) {
     double f = this->i();
     double f2 = this->j();
     double f3 = this->k();
     double f4 = this->r();
-    double f5 = quaternion.i();
-    double f6 = quaternion.j();
-    double f7 = quaternion.k();
-    double f8 = quaternion.r();
+    double f5 = quaternion->i();
+    double f6 = quaternion->j();
+    double f7 = quaternion->k();
+    double f8 = quaternion->r();
     this->m_i = f4 * f5 + f * f8 + f2 * f7 - f3 * f6;
     this->m_j = f4 * f6 - f * f7 + f2 * f8 + f3 * f5;
     this->m_k = f4 * f7 + f * f6 - f2 * f5 + f3 * f8;

@@ -7,6 +7,8 @@
 
 #include <vector>
 #include <map>
+#include "Constants.h"
+
 /*
  * equals() 未实现
  */
@@ -15,6 +17,11 @@ namespace cerver{
         class Quaternion;
         class Vector3f;
         class Matrix4f {
+
+            typedef std::shared_ptr<Quaternion> QuaternionPtr;
+            typedef std::shared_ptr<Vector3f> Vector3fPtr;
+            typedef std::shared_ptr<Matrix4f> Matrix4fPtr;
+
         public:
             int ORDER = 4;
             double m00{};
@@ -37,61 +44,61 @@ namespace cerver{
         public:
             Matrix4f() = default;
 
-            Matrix4f(Matrix4f const &matrix4f);
+            Matrix4f(Matrix4fPtr matrix4f);
 
-            Matrix4f(Quaternion quaternion);
+            Matrix4f(QuaternionPtr quaternion);
 
             bool isInteger();
 
             static bool isInteger(double f);
 
-            Matrix4f copy();
+            Matrix4fPtr copy();
 
-            void multiply(Matrix4f matrix4f);
+            void multiply(Matrix4fPtr matrix4f);
 
-            void multiply(Quaternion quaternion);
+            void multiply(QuaternionPtr quaternion);
 
             void multiply(double d);
 
-            void add(const Matrix4f& matrix4f);
+            void add(Matrix4fPtr matrix4f);
 
-            void subtract(const Matrix4f& matrix4f);
+            void subtract(Matrix4fPtr matrix4f);
 
             double trace() const;
 
-            Matrix4f perspective(double fov, double f, double f2, double f3);
+            Matrix4fPtr perspective(double fov, double f, double f2, double f3);
 
-            Matrix4f orthographic(double f, double f2, double f3, double f4);
+            Matrix4fPtr orthographic(double f, double f2, double f3, double f4);
 
-            Matrix4f orthographic(double f, double f2, double f3, double f4, double f5, double f6);
+            Matrix4fPtr orthographic(double f, double f2, double f3, double f4, double f5, double f6);
 
-            void translate(Vector3f vector3f);
+            void translate(Vector3fPtr vector3f);
 
             void multiplyWithTranslation(double f, double f2, double f3);
 
-            Matrix4f createScaleMatrix(double f, double f2, double f3);
+            Matrix4fPtr createScaleMatrix(double f, double f2, double f3);
 
-            Matrix4f createTranslateMatrix(double f, double f2, double f3);
+            Matrix4fPtr createTranslateMatrix(double f, double f2, double f3);
 
             int hashCode() const;
 
             int bufferIndex(int n, int n2);
 
-            void load(std::map<int, double> buffer);
+            void load(FloatBuffer buffer);
 
-            void loadTransposed(std::map<int, double> buffer);
+            void loadTransposed(FloatBuffer buffer);
 
-            void load(std::map<int, double> buffer, bool bl);
+            void load(FloatBuffer buffer, bool bl);
 
-            void load(Matrix4f matrix4f);
+            void load(Matrix4fPtr matrix4f);
 
             std::string toString();
 
-            void store(std::map<int, double> buffer);
+            void store(FloatBuffer buffer);
 
-            void storeTransposed(std::map<int, double> buffer);
+            void storeTransposed(FloatBuffer buffer);
 
-            void store(std::map<int, double> buffer, bool bl);
+            void store(FloatBuffer buffer, bool bl);
 
             void setIdentity();
 

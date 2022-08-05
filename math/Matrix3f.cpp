@@ -3,14 +3,15 @@
 //
 #include "Quaternion.h"
 #include "Matrix3f.h"
+#include <utility>
 #include "Matrix4f.h"
 #include "../minecraft/util/Mth.h"
 
-cerver::math::Matrix3f::Matrix3f(cerver::math::Quaternion quaternion) {
-    double f = quaternion.i();
-    double f2 = quaternion.j();
-    double f3 = quaternion.k();
-    double f4 = quaternion.r();
+cerver::math::Matrix3f::Matrix3f(std::shared_ptr<Quaternion> quaternion) {
+    double f = quaternion->i();
+    double f2 = quaternion->j();
+    double f3 = quaternion->k();
+    double f4 = quaternion->r();
     double f5 = 2.0 * f * f;
     double f6 = 2.0 * f2 * f2;
     double f7 = 2.0 * f3 * f3;
@@ -31,36 +32,36 @@ cerver::math::Matrix3f::Matrix3f(cerver::math::Quaternion quaternion) {
     this->m12 = 2.0 * (f9 - f11);
 }
 
-cerver::math::Matrix3f cerver::math::Matrix3f::createScaleMatrix(double f, double f2, double f3) {
+std::shared_ptr<cerver::math::Matrix3f> cerver::math::Matrix3f::createScaleMatrix(double f, double f2, double f3) {
     Matrix3f matrix3f;
     matrix3f.m00 = f;
     matrix3f.m11 = f2;
     matrix3f.m22 = f3;
-    return matrix3f;
+    return std::make_shared<Matrix3f>(matrix3f);
 }
 
-cerver::math::Matrix3f::Matrix3f(cerver::math::Matrix4f matrix4f) {
-    this->m00 = matrix4f.m00;
-    this->m01 = matrix4f.m01;
-    this->m02 = matrix4f.m02;
-    this->m10 = matrix4f.m10;
-    this->m11 = matrix4f.m11;
-    this->m12 = matrix4f.m12;
-    this->m20 = matrix4f.m20;
-    this->m21 = matrix4f.m21;
-    this->m22 = matrix4f.m22;
+cerver::math::Matrix3f::Matrix3f(std::shared_ptr<Matrix4f> matrix4f) {
+    this->m00 = matrix4f->m00;
+    this->m01 = matrix4f->m01;
+    this->m02 = matrix4f->m02;
+    this->m10 = matrix4f->m10;
+    this->m11 = matrix4f->m11;
+    this->m12 = matrix4f->m12;
+    this->m20 = matrix4f->m20;
+    this->m21 = matrix4f->m21;
+    this->m22 = matrix4f->m22;
 }
 
-cerver::math::Matrix3f::Matrix3f(const cerver::math::Matrix3f &matrix3f) {
-    this->m00 = matrix3f.m00;
-    this->m01 = matrix3f.m01;
-    this->m02 = matrix3f.m02;
-    this->m10 = matrix3f.m10;
-    this->m11 = matrix3f.m11;
-    this->m12 = matrix3f.m12;
-    this->m20 = matrix3f.m20;
-    this->m21 = matrix3f.m21;
-    this->m22 = matrix3f.m22;
+cerver::math::Matrix3f::Matrix3f(std::shared_ptr<Matrix3f> matrix3f) {
+    this->m00 = matrix3f->m00;
+    this->m01 = matrix3f->m01;
+    this->m02 = matrix3f->m02;
+    this->m10 = matrix3f->m10;
+    this->m11 = matrix3f->m11;
+    this->m12 = matrix3f->m12;
+    this->m20 = matrix3f->m20;
+    this->m21 = matrix3f->m21;
+    this->m22 = matrix3f->m22;
 }
 
 std::pair<double, double> cerver::math::Matrix3f::approxGivensQuat(double f, double f2, double f3) {
@@ -87,77 +88,77 @@ std::pair<double, double> cerver::math::Matrix3f::qrGivensQuat(double f, double 
     return {(f5 *= f3), (f6 *= f3)};
 }
 
-cerver::math::Quaternion cerver::math::Matrix3f::stepJacobi(cerver::math::Matrix3f matrix3f) {
-    std::pair<double, double> pair;
+std::shared_ptr<cerver::math::Quaternion> cerver::math::Matrix3f::stepJacobi(std::shared_ptr<Matrix3f> matrix3f) {
+    std::pair<int,double> pair;
     double f;
     double f2;
     double f3;
     double f4;
     double f5;
-    cerver::math::Quaternion quaternion = Quaternion();
-    Matrix3f matrix3f2 = Matrix3f();
-    Quaternion quaternion2 = cerver::math::ONE->copy();
-    if (matrix3f.m01 * matrix3f.m01 + matrix3f.m10 * matrix3f.m10 > 0.0000001) {
-        pair = approxGivensQuat(matrix3f.m00, 0.5 * (matrix3f.m01 + matrix3f.m10), matrix3f.m11);
+    std::shared_ptr<cerver::math::Quaternion> quaternion = std::make_shared<Quaternion>(Quaternion());
+    std::shared_ptr<Matrix3f> matrix3f2 = std::make_shared<Matrix3f>(Matrix3f());
+    Quaternion quaternion2 = cerver::math::Quaternion().ONE->copy();
+    if (matrix3f->m01 * matrix3f->m01 + matrix3f->m10 * matrix3f->m10 > 0.0000001) {
+        pair = approxGivensQuat(matrix3f->m00, 0.5 * (matrix3f->m01 + matrix3f->m10), matrix3f->m11);
         f5 = pair.first;
         f2 = pair.second;
-        quaternion = Quaternion(0.0, 0.0, f5, f2);
+        quaternion = std::make_shared<Quaternion>(Quaternion(0.0, 0.0, f5, f2));
         f4 = f2 * f2 - f5 * f5;
         f3 = -2.0 * f5 * f2;
         f = f * f2 + f5 * f5;
-        quaternion2.mul(quaternion);
-        matrix3f2.setIdentity();
-        matrix3f2.m00 = f4;
-        matrix3f2.m11 = f4;
-        matrix3f2.m10 = -f3;
-        matrix3f2.m01 = f3;
-        matrix3f2.m22 = f;
-        matrix3f.mul(matrix3f2);
-        matrix3f2.transpose();
-        matrix3f2.mul(matrix3f);
-        matrix3f.load(matrix3f2);
+        quaternion2.mul(std::make_shared<Quaternion>(quaternion));
+        matrix3f2->setIdentity();
+        matrix3f2->m00 = f4;
+        matrix3f2->m11 = f4;
+        matrix3f2->m10 = -f3;
+        matrix3f2->m01 = f3;
+        matrix3f2->m22 = f;
+        matrix3f->mul(matrix3f2);
+        matrix3f2->transpose();
+        matrix3f2->mul(matrix3f);
+        matrix3f->load(matrix3f2);
     }
-    if (matrix3f.m02 * matrix3f.m02 + matrix3f.m20 * matrix3f.m20 > 0.0000001) {
-        pair = approxGivensQuat(matrix3f.m00, 0.5 * (matrix3f.m02 + matrix3f.m20), matrix3f.m22);
+    if (matrix3f->m02 * matrix3f->m02 + matrix3f->m20 * matrix3f->m20 > 0.0000001) {
+        pair = approxGivensQuat(matrix3f->m00, 0.5 * (matrix3f->m02 + matrix3f->m20), matrix3f->m22);
         double f6 = -(pair.first);
         f2 = pair.second;
-        quaternion = Quaternion(0.0, f6, 0.0, f2);
+        quaternion = std::make_shared<Quaternion>(Quaternion(0.0, f6, 0.0, f2));
         f4 = f2 * f2 - f6 * f6;
         f3 = -2.0 * f6 * f2;
         f = f2 * f2 + f6 * f6;
         quaternion2.mul(quaternion);
-        matrix3f2.setIdentity();
-        matrix3f2.m00 = f4;
-        matrix3f2.m22 = f4;
-        matrix3f2.m20 = f3;
-        matrix3f2.m02 = -f3;
-        matrix3f2.m11 = f;
-        matrix3f.mul(matrix3f2);
-        matrix3f2.transpose();
-        matrix3f2.mul(matrix3f);
-        matrix3f.load(matrix3f2);
+        matrix3f2->setIdentity();
+        matrix3f2->m00 = f4;
+        matrix3f2->m22 = f4;
+        matrix3f2->m20 = f3;
+        matrix3f2->m02 = -f3;
+        matrix3f2->m11 = f;
+        matrix3f->mul(matrix3f2);
+        matrix3f2->transpose();
+        matrix3f2->mul(matrix3f);
+        matrix3f->load(matrix3f2);
     }
-    if (matrix3f.m12 * matrix3f.m12 + matrix3f.m21 * matrix3f.m21 > 0.0000001) {
-        pair = approxGivensQuat(matrix3f.m11, 0.5 * (matrix3f.m12 + matrix3f.m21), matrix3f.m22);
+    if (matrix3f->m12 * matrix3f->m12 + matrix3f->m21 * matrix3f->m21 > 0.0000001) {
+        pair = approxGivensQuat(matrix3f->m11, 0.5 * (matrix3f->m12 + matrix3f->m21), matrix3f->m22);
         f5 = pair.first;
         f2 = pair.second;
-        quaternion = Quaternion(f5, 0.0, 0.0, f2);
+        quaternion = std::make_shared<Quaternion>(Quaternion(f5, 0.0, 0.0, f2));
         f4 = f2 * f2 - f5 * f5;
         f3 = -2.0 * f5 * f2;
         f = f2 * f2 + f5 * f5;
         quaternion2.mul(quaternion);
-        matrix3f2.setIdentity();
-        matrix3f2.m11 = f4;
-        matrix3f2.m22 = f4;
-        matrix3f2.m21 = -f3;
-        matrix3f2.m12 = f3;
-        matrix3f2.m00 = f;
-        matrix3f.mul(matrix3f2);
-        matrix3f2.transpose();
-        matrix3f2.mul(matrix3f);
-        matrix3f.load(matrix3f2);
+        matrix3f2->setIdentity();
+        matrix3f2->m11 = f4;
+        matrix3f2->m22 = f4;
+        matrix3f2->m21 = -f3;
+        matrix3f2->m12 = f3;
+        matrix3f2->m00 = f;
+        matrix3f->mul(matrix3f2);
+        matrix3f2->transpose();
+        matrix3f2->mul(matrix3f);
+        matrix3f->load(matrix3f2);
     }
-    return quaternion2;
+    return std::make_shared<Quaternion>(quaternion2);
 }
 
 void cerver::math::Matrix3f::setIdentity() {
@@ -237,16 +238,16 @@ void cerver::math::Matrix3f::set(int n, int n2, double f) {
     }
 }
 
-void cerver::math::Matrix3f::mul(const cerver::math::Matrix3f& matrix3f) {
-    double f = this->m00 * matrix3f.m00 + this->m01 * matrix3f.m10 + this->m02 * matrix3f.m20;
-    double f2 = this->m00 * matrix3f.m01 + this->m01 * matrix3f.m11 + this->m02 * matrix3f.m21;
-    double f3 = this->m00 * matrix3f.m02 + this->m01 * matrix3f.m12 + this->m02 * matrix3f.m22;
-    double f4 = this->m10 * matrix3f.m00 + this->m11 * matrix3f.m10 + this->m12 * matrix3f.m20;
-    double f5 = this->m10 * matrix3f.m01 + this->m11 * matrix3f.m11 + this->m12 * matrix3f.m21;
-    double f6 = this->m10 * matrix3f.m02 + this->m11 * matrix3f.m12 + this->m12 * matrix3f.m22;
-    double f7 = this->m20 * matrix3f.m00 + this->m21 * matrix3f.m10 + this->m22 * matrix3f.m20;
-    double f8 = this->m20 * matrix3f.m01 + this->m21 * matrix3f.m11 + this->m22 * matrix3f.m21;
-    double f9 = this->m20 * matrix3f.m02 + this->m21 * matrix3f.m12 + this->m22 * matrix3f.m22;
+void cerver::math::Matrix3f::mul(std::shared_ptr<Matrix3f> matrix3f) {
+    double f = this->m00 * matrix3f->m00 + this->m01 * matrix3f->m10 + this->m02 * matrix3f->m20;
+    double f2 = this->m00 * matrix3f->m01 + this->m01 * matrix3f->m11 + this->m02 * matrix3f->m21;
+    double f3 = this->m00 * matrix3f->m02 + this->m01 * matrix3f->m12 + this->m02 * matrix3f->m22;
+    double f4 = this->m10 * matrix3f->m00 + this->m11 * matrix3f->m10 + this->m12 * matrix3f->m20;
+    double f5 = this->m10 * matrix3f->m01 + this->m11 * matrix3f->m11 + this->m12 * matrix3f->m21;
+    double f6 = this->m10 * matrix3f->m02 + this->m11 * matrix3f->m12 + this->m12 * matrix3f->m22;
+    double f7 = this->m20 * matrix3f->m00 + this->m21 * matrix3f->m10 + this->m22 * matrix3f->m20;
+    double f8 = this->m20 * matrix3f->m01 + this->m21 * matrix3f->m11 + this->m22 * matrix3f->m21;
+    double f9 = this->m20 * matrix3f->m02 + this->m21 * matrix3f->m12 + this->m22 * matrix3f->m22;
     this->m00 = f;
     this->m01 = f2;
     this->m02 = f3;
@@ -258,8 +259,8 @@ void cerver::math::Matrix3f::mul(const cerver::math::Matrix3f& matrix3f) {
     this->m22 = f9;
 }
 
-void cerver::math::Matrix3f::mul(cerver::math::Quaternion quaternion) {
-    this->mul(Matrix3f(quaternion));
+void cerver::math::Matrix3f::mul(std::shared_ptr<Quaternion> quaternion) {
+    this->mul(std::make_shared<Matrix3f>(Matrix3f(std::move(quaternion))));
 }
 
 void cerver::math::Matrix3f::mul(double f) {
@@ -274,36 +275,36 @@ void cerver::math::Matrix3f::mul(double f) {
     this->m22 *= f;
 }
 
-void cerver::math::Matrix3f::add(const cerver::math::Matrix3f& matrix3f) {
-    this->m00 += matrix3f.m00;
-    this->m01 += matrix3f.m01;
-    this->m02 += matrix3f.m02;
-    this->m10 += matrix3f.m10;
-    this->m11 += matrix3f.m11;
-    this->m12 += matrix3f.m12;
-    this->m20 += matrix3f.m20;
-    this->m21 += matrix3f.m21;
-    this->m22 += matrix3f.m22;
+void cerver::math::Matrix3f::add(std::shared_ptr<Matrix3f> matrix3f) {
+    this->m00 += matrix3f->m00;
+    this->m01 += matrix3f->m01;
+    this->m02 += matrix3f->m02;
+    this->m10 += matrix3f->m10;
+    this->m11 += matrix3f->m11;
+    this->m12 += matrix3f->m12;
+    this->m20 += matrix3f->m20;
+    this->m21 += matrix3f->m21;
+    this->m22 += matrix3f->m22;
 }
 
-void cerver::math::Matrix3f::sub(const cerver::math::Matrix3f& matrix3f) {
-    this->m00 -= matrix3f.m00;
-    this->m01 -= matrix3f.m01;
-    this->m02 -= matrix3f.m02;
-    this->m10 -= matrix3f.m10;
-    this->m11 -= matrix3f.m11;
-    this->m12 -= matrix3f.m12;
-    this->m20 -= matrix3f.m20;
-    this->m21 -= matrix3f.m21;
-    this->m22 -= matrix3f.m22;
+void cerver::math::Matrix3f::sub(std::shared_ptr<Matrix3f> matrix3f) {
+    this->m00 -= matrix3f->m00;
+    this->m01 -= matrix3f->m01;
+    this->m02 -= matrix3f->m02;
+    this->m10 -= matrix3f->m10;
+    this->m11 -= matrix3f->m11;
+    this->m12 -= matrix3f->m12;
+    this->m20 -= matrix3f->m20;
+    this->m21 -= matrix3f->m21;
+    this->m22 -= matrix3f->m22;
 }
 
 double cerver::math::Matrix3f::trace() const {
     return this->m00 + this->m11 + this->m22;
 }
 
-cerver::math::Matrix3f cerver::math::Matrix3f::copy() {
-    return Matrix3f(*this);
+std::shared_ptr<cerver::math::Matrix3f> cerver::math::Matrix3f::copy() {
+    return std::make_shared<Matrix3f>(*this);
 }
 
 void cerver::math::Matrix3f::store(std::map<int, double> floatBuffer, bool bl) {
@@ -375,16 +376,16 @@ void cerver::math::Matrix3f::load(const std::map<int, double>& floatBuffer, bool
     }
 }
 
-void cerver::math::Matrix3f::load(const cerver::math::Matrix3f& matrix3f) {
-    this->m00 = matrix3f.m00;
-    this->m01 = matrix3f.m01;
-    this->m02 = matrix3f.m02;
-    this->m10 = matrix3f.m10;
-    this->m11 = matrix3f.m11;
-    this->m12 = matrix3f.m12;
-    this->m20 = matrix3f.m20;
-    this->m21 = matrix3f.m21;
-    this->m22 = matrix3f.m22;
+void cerver::math::Matrix3f::load(std::shared_ptr<Matrix3f> matrix3f) {
+    this->m00 = matrix3f->m00;
+    this->m01 = matrix3f->m01;
+    this->m02 = matrix3f->m02;
+    this->m10 = matrix3f->m10;
+    this->m11 = matrix3f->m11;
+    this->m12 = matrix3f->m12;
+    this->m20 = matrix3f->m20;
+    this->m21 = matrix3f->m21;
+    this->m22 = matrix3f->m22;
 }
 
 std::string cerver::math::Matrix3f::toString() const {
@@ -434,54 +435,54 @@ void cerver::math::Matrix3f::transpose() {
     this->m21 = f;
 }
 
-void cerver::math::Matrix3f::sortSingularValues(cerver::math::Matrix3f matrix3f, cerver::math::Quaternion quaternion) {
-    cerver::math::Quaternion quaternion2;
+void cerver::math::Matrix3f::sortSingularValues(std::shared_ptr<Matrix3f> matrix3f, std::shared_ptr<Quaternion> quaternion) {
+    std::shared_ptr<cerver::math::Quaternion> quaternion2;
     double f;
-    double f2 = matrix3f.m00 * matrix3f.m00 + matrix3f.m10 * matrix3f.m10 + matrix3f.m20 * matrix3f.m20;
-    double f3 = matrix3f.m01 * matrix3f.m01 + matrix3f.m11 * matrix3f.m11 + matrix3f.m21 * matrix3f.m21;
-    double f4 = matrix3f.m02 * matrix3f.m02 + matrix3f.m12 * matrix3f.m12 + matrix3f.m22 * matrix3f.m22;
+    double f2 = matrix3f->m00 * matrix3f->m00 + matrix3f->m10 * matrix3f->m10 + matrix3f->m20 * matrix3f->m20;
+    double f3 = matrix3f->m01 * matrix3f->m01 + matrix3f->m11 * matrix3f->m11 + matrix3f->m21 * matrix3f->m21;
+    double f4 = matrix3f->m02 * matrix3f->m02 + matrix3f->m12 * matrix3f->m12 + matrix3f->m22 * matrix3f->m22;
     if (f2 < f3) {
-        f = matrix3f.m10;
-        matrix3f.m10 = -matrix3f.m00;
-        matrix3f.m00 = f;
-        f = matrix3f.m11;
-        matrix3f.m11 = -matrix3f.m01;
-        matrix3f.m01 = f;
-        f = matrix3f.m12;
-        matrix3f.m12 = -matrix3f.m02;
-        matrix3f.m02 = f;
-        quaternion2 = Quaternion(0.0f, 0.0f, SQ2, SQ2);
-        quaternion.mul(quaternion2);
+        f = matrix3f->m10;
+        matrix3f->m10 = -matrix3f->m00;
+        matrix3f->m00 = f;
+        f = matrix3f->m11;
+        matrix3f->m11 = -matrix3f->m01;
+        matrix3f->m01 = f;
+        f = matrix3f->m12;
+        matrix3f->m12 = -matrix3f->m02;
+        matrix3f->m02 = f;
+        quaternion2 = std::make_shared<Quaternion>(Quaternion(0.0f, 0.0f, SQ2, SQ2));
+        quaternion->mul(quaternion2);
         f = f2;
         f2 = f3;
         f3 = f;
     }
     if (f2 < f4) {
-        f = matrix3f.m20;
-        matrix3f.m20 = -matrix3f.m00;
-        matrix3f.m00 = f;
-        f = matrix3f.m21;
-        matrix3f.m21 = -matrix3f.m01;
-        matrix3f.m01 = f;
-        f = matrix3f.m22;
-        matrix3f.m22 = -matrix3f.m02;
-        matrix3f.m02 = f;
-        quaternion2 = Quaternion(0.0f, SQ2, 0.0f, SQ2);
-        quaternion.mul(quaternion2);
+        f = matrix3f->m20;
+        matrix3f->m20 = -matrix3f->m00;
+        matrix3f->m00 = f;
+        f = matrix3f->m21;
+        matrix3f->m21 = -matrix3f->m01;
+        matrix3f->m01 = f;
+        f = matrix3f->m22;
+        matrix3f->m22 = -matrix3f->m02;
+        matrix3f->m02 = f;
+        quaternion2 = std::make_shared<Quaternion>(Quaternion(0.0f, SQ2, 0.0f, SQ2));
+        quaternion->mul(quaternion2);
         f4 = f2;
     }
     if (f3 < f4) {
-        f = matrix3f.m20;
-        matrix3f.m20 = -matrix3f.m10;
-        matrix3f.m10 = f;
-        f = matrix3f.m21;
-        matrix3f.m21 = -matrix3f.m11;
-        matrix3f.m11 = f;
-        f = matrix3f.m22;
-        matrix3f.m22 = -matrix3f.m12;
-        matrix3f.m12 = f;
-        quaternion2 = Quaternion(SQ2, 0.0f, 0.0f, SQ2);
-        quaternion.mul(quaternion2);
+        f = matrix3f->m20;
+        matrix3f->m20 = -matrix3f->m10;
+        matrix3f->m10 = f;
+        f = matrix3f->m21;
+        matrix3f->m21 = -matrix3f->m11;
+        matrix3f->m11 = f;
+        f = matrix3f->m22;
+        matrix3f->m22 = -matrix3f->m12;
+        matrix3f->m12 = f;
+        quaternion2 = std::make_shared<Quaternion>(Quaternion(SQ2, 0.0f, 0.0f, SQ2));
+        quaternion->mul(quaternion2);
     }
 }
 
