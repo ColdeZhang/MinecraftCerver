@@ -48,10 +48,6 @@ namespace cerver {
 
             Vector3fPtr toYXZDegrees();
 
-            bool equals() {
-
-            }
-
             int hashCode();
 
             std::string toString();

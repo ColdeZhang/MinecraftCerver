@@ -4,7 +4,7 @@
 #include "Quaternion.h"
 #include "Vector3f.h"
 #include "Constants.h"
-#include "../minecraft/util/Mth.h"
+#include "minecraft/util/Mth.h"
 
 cerver::math::Quaternion::Quaternion(std::shared_ptr<Vector3f> vector3f, double f, bool bl) {
     if (bl) {

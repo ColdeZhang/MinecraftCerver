@@ -5,45 +5,35 @@
 #ifndef MINECRAFTCERVER_VECTOR3D_H
 #define MINECRAFTCERVER_VECTOR3D_H
 
+#include <cstdio>
+#include <memory>
+
 /*
  * 全部实现
  */
-class Vector3d {
-public:
-    double x;
-    double y;
-    double z;
+namespace cerver {
+    namespace math {
 
-    Vector3d(double d, double d2, double d3) {
-        this->x = d;
-        this->y = d2;
-        this->z = d3;
+        class Vector3d {
+
+            typedef std::shared_ptr<Vector3d> Vector3dPtr;
+
+        public:
+            double x;
+            double y;
+            double z;
+
+            Vector3d(double d, double d2, double d3);
+
+            void set(const Vector3dPtr& vector3d);
+
+            void set(double d, double d2, double d3);
+
+            void scale(double d);
+
+            void add(const Vector3dPtr& vector3d);
+
+        };
     }
-
-    void set(Vector3d vector3d){
-        this->x = vector3d.x;
-        this->y = vector3d.y;
-        this->z = vector3d.z;
-    }
-
-    void set(double d, double d2, double d3){
-        this->x = d;
-        this->y = d2;
-        this->z = d3;
-    }
-
-    void scale(double d) {
-        this->x *= d;
-        this->y *= d;
-        this->z *= d;
-    }
-
-    void add(Vector3d vector3d) {
-        this->x += vector3d.x;
-        this->y += vector3d.y;
-        this->z += vector3d.z;
-    }
-
-};
-
+}
 #endif //MINECRAFTCERVER_VECTOR3D_H

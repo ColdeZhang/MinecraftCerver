@@ -40,15 +40,15 @@ namespace cerver {
         public:
             Matrix3f() = default;
 
-            explicit Matrix3f(QuaternionPtr quaternion);
+            explicit Matrix3f(const QuaternionPtr& quaternion);
 
-            explicit Matrix3f(Matrix4fPtr matrix4f);
+            explicit Matrix3f(const Matrix4fPtr& matrix4f);
 
-            explicit Matrix3f(Matrix3fPtr matrix3f);
+            explicit Matrix3f(const Matrix3fPtr& matrix3f);
 
             static Matrix3fPtr createScaleMatrix(double f, double f2, double f3);
 
-            int hashCode();
+            int hashCode() const;
 
             static int bufferIndex(int n, int n2);
 
@@ -58,7 +58,7 @@ namespace cerver {
 
             void load(const FloatBuffer& floatBuffer, bool bl);
 
-            void load(Matrix3fPtr matrix3f);
+            void load(const Matrix3fPtr& matrix3f);
 
             std::string toString() const;
 
@@ -66,7 +66,7 @@ namespace cerver {
 
             void storeTransposed(FloatBuffer floatBuffer);
 
-            void store(FloatBuffer floatBuffer, bool bl);
+            void store(const FloatBuffer& floatBuffer, bool bl);
 
             void setIdentity();
 
@@ -78,15 +78,15 @@ namespace cerver {
 
             void set(int n, int n2, double f);
 
-            void mul(Matrix3fPtr matrix3f);
+            void mul(const Matrix3fPtr& matrix3f);
 
-            void mul(QuaternionPtr quaternion);
+            void mul(const QuaternionPtr& quaternion);
 
             void mul(double f);
 
-            void add(Matrix3fPtr matrix3f);
+            void add(const Matrix3fPtr& matrix3f);
 
-            void sub(Matrix3fPtr matrix3f);
+            void sub(const Matrix3fPtr& matrix3f);
 
             double trace() const;
 
@@ -99,11 +99,11 @@ namespace cerver {
         private:
             std::pair<double, double> approxGivensQuat(double f, double f2, double f3);
 
-            void sortSingularValues(Matrix3fPtr matrix3f, QuaternionPtr quaternion);
+            void sortSingularValues(const Matrix3fPtr& matrix3f, const QuaternionPtr& quaternion);
 
-            std::pair<double, double> qrGivensQuat(double f, double f2);
+            static std::pair<double, double> qrGivensQuat(double f, double f2);
 
-            QuaternionPtr stepJacobi(Matrix3fPtr matrix3f);
+            QuaternionPtr stepJacobi(const Matrix3fPtr& matrix3f);
 
         };
     }

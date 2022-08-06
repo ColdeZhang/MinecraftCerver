@@ -5,7 +5,7 @@
 #include "Vector3f.h"
 #include "Quaternion.h"
 #include "Matrix4f.h"
-#include "../minecraft/util/Mth.h"
+#include "minecraft/util/Mth.h"
 
 cerver::math::Vector4f::Vector4f(double f, double f2, double f3, double f4) {
     this->m_x = f;
