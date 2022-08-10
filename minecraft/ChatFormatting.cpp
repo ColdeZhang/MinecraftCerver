@@ -28,28 +28,7 @@ namespace cerver {
             this->m_id = n2;
             this->m_color = n3;
             this->m_toString = &"\u00a7"[c];
-            this->FORMATTING_BY_NAME[ChatFormatting::BLACK->getName()] = ChatFormatting::BLACK;
-            this->FORMATTING_BY_NAME[ChatFormatting::DARK_BLUE->getName()] = ChatFormatting::DARK_BLUE;
-            this->FORMATTING_BY_NAME[ChatFormatting::DARK_GREEN->getName()] = ChatFormatting::DARK_GREEN;
-            this->FORMATTING_BY_NAME[ChatFormatting::DARK_AQUA->getName()] = ChatFormatting::DARK_AQUA;
-            this->FORMATTING_BY_NAME[ChatFormatting::DARK_RED->getName()] = ChatFormatting::DARK_RED;
-            this->FORMATTING_BY_NAME[ChatFormatting::DARK_PURPLE->getName()] = ChatFormatting::DARK_PURPLE;
-            this->FORMATTING_BY_NAME[ChatFormatting::GOLD->getName()] = ChatFormatting::GOLD;
-            this->FORMATTING_BY_NAME[ChatFormatting::GRAY->getName()] = ChatFormatting::GRAY;
-            this->FORMATTING_BY_NAME[ChatFormatting::DARK_GRAY->getName()] = ChatFormatting::DARK_GRAY;
-            this->FORMATTING_BY_NAME[ChatFormatting::BLUE->getName()] = ChatFormatting::BLUE;
-            this->FORMATTING_BY_NAME[ChatFormatting::GREEN->getName()] = ChatFormatting::GREEN;
-            this->FORMATTING_BY_NAME[ChatFormatting::AQUA->getName()] = ChatFormatting::AQUA;
-            this->FORMATTING_BY_NAME[ChatFormatting::RED->getName()] = ChatFormatting::RED;
-            this->FORMATTING_BY_NAME[ChatFormatting::LIGHT_PURPLE->getName()] = ChatFormatting::LIGHT_PURPLE;
-            this->FORMATTING_BY_NAME[ChatFormatting::YELLOW->getName()] = ChatFormatting::YELLOW;
-            this->FORMATTING_BY_NAME[ChatFormatting::WHITE->getName()] = ChatFormatting::WHITE;
-            this->FORMATTING_BY_NAME[ChatFormatting::OBFUSCATED->getName()] = ChatFormatting::OBFUSCATED;
-            this->FORMATTING_BY_NAME[ChatFormatting::BOLD->getName()] = ChatFormatting::BOLD;
-            this->FORMATTING_BY_NAME[ChatFormatting::STRIKETHROUGH->getName()] = ChatFormatting::STRIKETHROUGH;
-            this->FORMATTING_BY_NAME[ChatFormatting::UNDERLINE->getName()] = ChatFormatting::UNDERLINE;
-            this->FORMATTING_BY_NAME[ChatFormatting::ITALIC->getName()] = ChatFormatting::ITALIC;
-            this->FORMATTING_BY_NAME[ChatFormatting::RESET->getName()] = ChatFormatting::RESET;
+            this->store_FORMATTING_BY_NAME();
         }
 
         char ChatFormats::getChar() const {
@@ -130,6 +109,31 @@ namespace cerver {
                 }
             }
             return arrayList;
+        }
+
+        void ChatFormats::store_FORMATTING_BY_NAME() {
+            this->FORMATTING_BY_NAME["BLACK"] = ChatFormatting::BLACK;
+            this->FORMATTING_BY_NAME["DARK_BLUE"] = ChatFormatting::DARK_BLUE;
+            this->FORMATTING_BY_NAME["DARK_GREEN"] = ChatFormatting::DARK_GREEN;
+            this->FORMATTING_BY_NAME["DARK_AQUA"] = ChatFormatting::DARK_AQUA;
+            this->FORMATTING_BY_NAME["DARK_RED"] = ChatFormatting::DARK_RED;
+            this->FORMATTING_BY_NAME["DARK_PURPLE"] = ChatFormatting::DARK_PURPLE;
+            this->FORMATTING_BY_NAME["GOLD"] = ChatFormatting::GOLD;
+            this->FORMATTING_BY_NAME["GRAY"] = ChatFormatting::GRAY;
+            this->FORMATTING_BY_NAME["DARK_GRAY"] = ChatFormatting::DARK_GRAY;
+            this->FORMATTING_BY_NAME["BLUE"] = ChatFormatting::BLUE;
+            this->FORMATTING_BY_NAME["GREEN"] = ChatFormatting::GREEN;
+            this->FORMATTING_BY_NAME["AQUA"] = ChatFormatting::AQUA;
+            this->FORMATTING_BY_NAME["RED"] = ChatFormatting::RED;
+            this->FORMATTING_BY_NAME["LIGHT_PURPLE"] = ChatFormatting::LIGHT_PURPLE;
+            this->FORMATTING_BY_NAME["YELLOW"] = ChatFormatting::YELLOW;
+            this->FORMATTING_BY_NAME["WHITE"] = ChatFormatting::WHITE;
+            this->FORMATTING_BY_NAME["OBFUSCATED"] = ChatFormatting::OBFUSCATED;
+            this->FORMATTING_BY_NAME["BOLD"] = ChatFormatting::BOLD;
+            this->FORMATTING_BY_NAME["STRIKETHROUGH"] = ChatFormatting::STRIKETHROUGH;
+            this->FORMATTING_BY_NAME["UNDERLINE"] = ChatFormatting::UNDERLINE;
+            this->FORMATTING_BY_NAME["ITALIC"] = ChatFormatting::ITALIC;
+            this->FORMATTING_BY_NAME["RESET"] = ChatFormatting::RESET;
         }
 
 

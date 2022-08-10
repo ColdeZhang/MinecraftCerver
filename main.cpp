@@ -2,13 +2,16 @@
 
 #include "math/Vector3f.h"
 
-#include "minecraft/ChatFormatting.h"
+#include "minecraft/network/chat/TextColor.h"
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
 
-    //cerver::minecraft::ChatFormatting::BLACK->getByID(8);
+    typedef std::shared_ptr<cerver::minecraft::network::chat::TextColor> TextColorPtr;
 
-    cerver::math::Vector3f vector3F(1.0, 2.0, 3.0);
+    TextColorPtr t1 = std::make_shared<cerver::minecraft::network::chat::TextColor>()->parseColor("#ff5555");
+
+    std::cout<<t1->hashCode()<<std::endl;
+
     return 0;
 }

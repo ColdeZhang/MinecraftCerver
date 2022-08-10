@@ -21,22 +21,24 @@ namespace cerver {
                     typedef std::shared_ptr<TextColor> TextColorPtr;
 
                 private:
-                    std::string CUSTOM_COLOR_PREFIX = "#";
+                    char CUSTOM_COLOR_PREFIX = '#';
                     std::map<ChatFormattingPtr, TextColorPtr> LEGACY_FORMAT_TO_COLOR;
                     std::map<std::string, TextColorPtr> NAMED_COLORS;
                     int value;
                     std::string name;
 
                 public:
+                    TextColor() = default;
+
                     TextColor(int n, std::string string);
 
-                    TextColor(int n);
+                    explicit TextColor(int n);
 
-                    int getValue();
+                    int getValue() const;
 
                     std::string serialize();
 
-                    std::string formatValue();
+                    std::string formatValue() const;
 
                     int hashCode();
 
@@ -44,9 +46,9 @@ namespace cerver {
 
                     TextColorPtr fromLegacyFormat(ChatFormattingPtr chatFormatting);
 
-                    TextColorPtr fromRgb(int n);
+                    static TextColorPtr fromRgb(int n);
 
-                    TextColorPtr parseColor(std::string string);
+                    TextColorPtr parseColor(std::string string) const;
                 };
 
             } // cerver

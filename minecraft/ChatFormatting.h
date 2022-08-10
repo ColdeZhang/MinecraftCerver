@@ -22,7 +22,7 @@ namespace cerver {
         private:
             wchar_t PREFIX_CODE = L'\u00a7';
             std::map<std::string, ChatFormatsPtr> FORMATTING_BY_NAME;
-            std::regex STRIP_FORMATTING_PATTERN = std::regex("(?i)\\u00a7[0-9A-FK-OR]");
+            std::regex STRIP_FORMATTING_PATTERN = std::regex("\\u00a7[0-9a-fA-FK-Ok-oR]");
             std::string m_name;
             char m_code{};
             bool m_isFormat{};
@@ -67,6 +67,8 @@ namespace cerver {
             std::string getSerializedName();
 
             std::vector<std::string> getNames(bool bl, bool bl2);
+
+            void store_FORMATTING_BY_NAME();
 
         };
 
