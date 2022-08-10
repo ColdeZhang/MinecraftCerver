@@ -11,7 +11,7 @@ int main() {
 
     TextColorPtr t1 = std::make_shared<cerver::minecraft::network::chat::TextColor>()->parseColor("#ff5555");
 
-    std::cout<<t1->hashCode()<<std::endl;
+    std::cout<<"Value : "<<t1->getValue()<<std::endl;
 
     return 0;
 }
