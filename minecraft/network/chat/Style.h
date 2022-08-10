@@ -17,7 +17,7 @@ namespace cerver {
                     typedef std::shared_ptr<Style> StylePtr;
 
                 public:
-                    StylePtr EMPTY = ;
+                    //StylePtr EMPTY = ;
 
                     Style();
 

@@ -12,6 +12,8 @@ file(GLOB_RECURSE MATH_UTIL "${CMAKE_SOURCE_DIR}/math/*.h"
                             "${CMAKE_SOURCE_DIR}/brigadier/*.h"
                             "${CMAKE_SOURCE_DIR}/brigadier/*.cpp"
                             "${CMAKE_SOURCE_DIR}/datafixers/*.h"
-                            "${CMAKE_SOURCE_DIR}/datafixers/*.cpp")
+                            "${CMAKE_SOURCE_DIR}/datafixers/*.cpp"
+                            "${CMAKE_SOURCE_DIR}/serialization/*.h"
+                            "${CMAKE_SOURCE_DIR}/serialization/*.cpp")
 
 add_executable(MinecraftCerver main.cpp ${MATH_UTIL})
