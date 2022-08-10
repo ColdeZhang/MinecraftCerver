@@ -1,4 +1,7 @@
-![](https://s2.loli.net/2022/08/10/POZxDkeq7vISwRo.png)
+<div align=center>
+<img src="https://s2.loli.net/2022/08/10/POZxDkeq7vISwRo.png" width="150"/>
+</div>
+
 # MinecraftCerver
  使用C++ 重写 Minecraft 服务端核心
 
