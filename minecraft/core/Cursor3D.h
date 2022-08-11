@@ -22,14 +22,23 @@ namespace minecraft {
             int height;
             int depth;
             int end;
-            int index;
-            int x;
-            int y;
-            int z;
+            int index{};
+            int x{};
+            int y{};
+            int z{};
 
         public:
-            
+            Cursor3D(int n, int n2, int n3, int n4, int n5, int n6);
 
+            bool advance();
+
+            int nextX() const;
+
+            int nextY() const;
+
+            int nextZ() const;
+
+            int getNextType() const;
             
         };
 
