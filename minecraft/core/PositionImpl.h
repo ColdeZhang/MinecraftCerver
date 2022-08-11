@@ -26,9 +26,8 @@ namespace minecraft {
             double z() override;
         };
 
-    };
 
-} // minecraft
+    } // minecraft
 } // core
 
 #endif //MINECRAFTCERVER_POSITIONIMPL_H

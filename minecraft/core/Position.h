@@ -10,9 +10,9 @@ namespace minecraft {
 
         class Position {
         public:
-            virtual double x(){};
-            virtual double y(){};
-            virtual double z(){};
+            virtual double x();
+            virtual double y();
+            virtual double z();
         };
 
     } // minecraft
