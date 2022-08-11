@@ -7,27 +7,29 @@
 
 #include "minecraft/core/Position.h"
 
-namespace minecraft {
-    namespace core {
+namespace cerver {
+    namespace minecraft {
+        namespace core {
 
-        class PositionImpl : public Position {
-        protected:
-            double m_x;
-            double m_y;
-            double m_z;
+            class PositionImpl : public Position {
+            protected:
+                double m_x;
+                double m_y;
+                double m_z;
 
-        public:
-            PositionImpl(double d, double d2, double d3);
+            public:
+                PositionImpl(double d, double d2, double d3);
 
-            double x() override;
+                double x() override;
 
-            double y() override;
+                double y() override;
 
-            double z() override;
-        };
+                double z() override;
+            };
 
 
-    } // minecraft
-} // core
+        } // minecraft
+    } // core
+}
 
 #endif //MINECRAFTCERVER_POSITIONIMPL_H

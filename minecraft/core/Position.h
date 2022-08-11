@@ -5,17 +5,21 @@
 #ifndef MINECRAFTCERVER_POSITION_H
 #define MINECRAFTCERVER_POSITION_H
 
-namespace minecraft {
-    namespace core {
+namespace cerver {
+    namespace minecraft {
+        namespace core {
 
-        class Position {
-        public:
-            virtual double x();
-            virtual double y();
-            virtual double z();
-        };
+            class Position {
+            public:
+                virtual double x();
 
-    } // minecraft
-} // core
+                virtual double y();
+
+                virtual double z();
+            };
+
+        } // minecraft
+    } // core
+}
 
 #endif //MINECRAFTCERVER_POSITION_H

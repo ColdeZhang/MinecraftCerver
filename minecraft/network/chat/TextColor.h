@@ -40,7 +40,7 @@ namespace cerver {
 
                     std::string formatValue() const;
 
-                    int hashCode();
+                    size_t hashCode();
 
                     std::string toString();
 

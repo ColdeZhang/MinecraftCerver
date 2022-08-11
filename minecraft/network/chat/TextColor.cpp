@@ -4,7 +4,7 @@
 
 #include "TextColor.h"
 
-#include <utility>
+#include "util/Hash.h"
 #include <sstream>
 
 namespace cerver {
@@ -42,9 +42,8 @@ namespace cerver {
                     return "#" + out;
                 }
 
-                int TextColor::hashCode() {
-                    std::hash <TextColor *> hashThis;
-                    return hashThis(this);
+                size_t TextColor::hashCode() {
+                    return util::Hash(this);
                 }
 
                 std::string TextColor::toString() {

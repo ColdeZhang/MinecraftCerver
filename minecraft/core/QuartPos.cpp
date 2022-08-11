@@ -4,28 +4,30 @@
 
 #include "QuartPos.h"
 
-namespace minecraft {
-    namespace core {
-        int QuartPos::fromBlock(int n) {
-            return n>>2;
-        }
+namespace cerver {
+    namespace minecraft {
+        namespace core {
+            int QuartPos::fromBlock(int n) {
+                return n >> 2;
+            }
 
-        int QuartPos::quartLocal(int n) {
-            return n & 3;
-        }
+            int QuartPos::quartLocal(int n) {
+                return n & 3;
+            }
 
-        int QuartPos::toBlock(int n) {
-            return n << 2;
-        }
+            int QuartPos::toBlock(int n) {
+                return n << 2;
+            }
 
-        int QuartPos::fromSection(int n) {
-            return n << 2;
-        }
+            int QuartPos::fromSection(int n) {
+                return n << 2;
+            }
 
-        int QuartPos::toSection(int n) {
-            return n >> 2;
-        }
+            int QuartPos::toSection(int n) {
+                return n >> 2;
+            }
 
 
-    } // minecraft
-} // core
+        } // minecraft
+    } // core
+}
