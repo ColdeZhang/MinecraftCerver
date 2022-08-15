@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.22)
 project(MinecraftCerver)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(${CMAKE_SOURCE_DIR})
+
+add_subdirectory("${CMAKE_SOURCE_DIR}/util/glog")
 
 file(GLOB_RECURSE MATH_UTIL "${CMAKE_SOURCE_DIR}/math/*.h"
         "${CMAKE_SOURCE_DIR}/math/*.cpp"
@@ -21,3 +23,5 @@ file(GLOB_RECURSE MATH_UTIL "${CMAKE_SOURCE_DIR}/math/*.h"
         "${CMAKE_SOURCE_DIR}/util/*.cpp")
 
 add_executable(MinecraftCerver main.cpp ${MATH_UTIL})
+
+target_link_libraries (MinecraftCerver glog::glog)
