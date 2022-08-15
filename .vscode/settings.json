@@ -68,6 +68,19 @@
         "algorithm": "cpp",
         "functional": "cpp",
         "iterator": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "csetjmp": "cpp",
+        "csignal": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "list": "cpp",
+        "numeric": "cpp",
+        "queue": "cpp",
+        "random": "cpp",
+        "set": "cpp",
+        "stack": "cpp",
+        "unordered_set": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp"
     }
 }

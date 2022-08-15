@@ -5,9 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-add_subdirectory("${CMAKE_SOURCE_DIR}/util/glog")
 
-file(GLOB_RECURSE MATH_UTIL "${CMAKE_SOURCE_DIR}/math/*.h"
+file(GLOB_RECURSE MATH_UTIL
+        "${CMAKE_SOURCE_DIR}/math/*.h"
         "${CMAKE_SOURCE_DIR}/math/*.cpp"
         "${CMAKE_SOURCE_DIR}/minecraft/*.h"
         "${CMAKE_SOURCE_DIR}/minecraft/*.cpp"
@@ -24,4 +24,3 @@ file(GLOB_RECURSE MATH_UTIL "${CMAKE_SOURCE_DIR}/math/*.h"
 
 add_executable(MinecraftCerver main.cpp ${MATH_UTIL})
 
-target_link_libraries (MinecraftCerver glog::glog)
